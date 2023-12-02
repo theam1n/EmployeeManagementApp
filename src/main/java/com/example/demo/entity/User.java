@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "user")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements UserDetails {
@@ -38,6 +39,7 @@ public class User implements UserDetails {
 
     private String password;
 
+    @Builder.Default
     private boolean status = true;
 
     @CreationTimestamp
@@ -53,6 +55,7 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
+    @Builder.Default
     private Set<Role> roles = new HashSet<>();
 
     @Override

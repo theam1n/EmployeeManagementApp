@@ -17,3 +17,12 @@ spring:
 
 secret:
   key: e246d2122b6c12acc7ccd5d685a1eab6899790bb26bd20cc7782621480a20d48
+
+
+
+logging:
+  level:
+    root: info
+
+
+

@@ -5,11 +5,14 @@ import com.example.demo.dto.LoginResponse;
 import com.example.demo.dto.UserRequest;
 import com.example.demo.dto.UserResponse;
 import com.example.demo.entity.User;
+import com.example.demo.exception.NotFoundException;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 import com.example.demo.service.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
@@ -30,26 +34,37 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse saveUser(UserRequest userRequest) {
 
+        logger.info("ActionLog.saveUser.start request: {}",userRequest);
+
         userRequest.setPassword(passwordEncoder.encode(userRequest.getPassword()));
 
         var user = userMapper.requestToEntity(userRequest);
         var response = userMapper.entityToResponse(userRepository.save(user));
+
+        logger.info("ActionLog.saveUser.end response: {}", response);
 
         return response;
     }
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
+
+        logger.info("ActionLog.login.start request: {}",loginRequest);
+
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
                 loginRequest.getPassword()));
 
         User user =  userRepository.findByUsername(loginRequest.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         String token = jwtService.generateToken(user);
 
-        return LoginResponse.builder()
+        LoginResponse loginResponse = LoginResponse.builder()
                 .token(token)
                 .build();
+
+        logger.info("ActionLog.login.end response: {}",loginResponse);
+
+        return loginResponse;
     }
 }
