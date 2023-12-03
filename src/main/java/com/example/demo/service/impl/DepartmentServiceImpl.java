@@ -56,16 +56,6 @@ public class DepartmentServiceImpl implements DepartmentService {
         return response;
     }
 
-    public Department getDepartment1(Long id) {
-
-        Optional<Department> optionalDepartment = Optional.ofNullable(departmentRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Department not found with id: " + id)));
-
-        var department = optionalDepartment.get();
-
-
-        return department;
-    }
 
     @Override
     public List<DepartmentResponse> getAllDepartments() {

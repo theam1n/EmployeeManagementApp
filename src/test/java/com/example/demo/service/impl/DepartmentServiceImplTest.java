@@ -22,6 +22,9 @@ class DepartmentServiceImplTest {
     @Mock
     private DepartmentRepository departmentRepository;
 
+    @Mock
+    private DepartmentMapper departmentMapper;
+
     @InjectMocks
     private DepartmentServiceImpl departmentService;
 
@@ -32,7 +35,7 @@ class DepartmentServiceImplTest {
         Department department = Department.builder().id(id).name("IT").build();
         given(departmentRepository.findById(id)).willReturn(Optional.of(department));
 
-        Department departmentResponse = departmentService.getDepartment1(id);
+        DepartmentResponse departmentResponse = departmentService.getDepartment(id);
 
         assertThat(departmentResponse).isNotNull();
         assertEquals(1,departmentResponse.getId());

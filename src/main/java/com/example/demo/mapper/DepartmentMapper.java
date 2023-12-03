@@ -16,5 +16,6 @@ public interface DepartmentMapper {
 
     @Mapping(target = "id", ignore = true)
     Department requestToEntity(DepartmentRequest departmentRequest);
+
     DepartmentResponse entityToResponse(Department department);
 }
