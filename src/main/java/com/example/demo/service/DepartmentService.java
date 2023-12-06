@@ -1,20 +1,19 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.DepartmentDto;
 import com.example.demo.dto.DepartmentRequest;
-import com.example.demo.dto.DepartmentResponse;
-import com.example.demo.entity.Department;
 
 import java.util.List;
 
 public interface DepartmentService {
 
-    DepartmentResponse saveDepartment(DepartmentRequest departmentRequest);
+    DepartmentDto saveDepartment(DepartmentRequest departmentRequest);
 
-    DepartmentResponse getDepartment(Long id);
+    DepartmentDto getDepartment(Long id);
 
-    List<DepartmentResponse> getAllDepartments();
+    List<DepartmentDto> getAllDepartments();
 
-    DepartmentResponse editDepartment(Department department);
+    DepartmentDto editDepartment(DepartmentDto department);
 
     void deleteDepartment(Long id);
 

@@ -1,10 +1,12 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.dto.PositionDto;
 import com.example.demo.dto.PositionRequest;
-import com.example.demo.dto.PositionResponse;
 import com.example.demo.entity.Position;
 import com.example.demo.exception.NotFoundException;
+import com.example.demo.mapper.DepartmentMapper;
 import com.example.demo.mapper.PositionMapper;
+import com.example.demo.repository.DepartmentRepository;
 import com.example.demo.repository.PositionRepository;
 import com.example.demo.service.PositionService;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +25,15 @@ public class PositionServiceImpl implements PositionService {
 
     private final PositionRepository positionRepository;
 
+    private final DepartmentRepository departmentRepository;
+
     private final PositionMapper positionMapper;
+
+    private final DepartmentMapper departmentMapper;
 
     private static final Logger logger = LoggerFactory.getLogger(PositionServiceImpl.class);
     @Override
-    public PositionResponse savePosition(PositionRequest positionRequest) {
+    public PositionDto savePosition(PositionRequest positionRequest) {
         logger.info("ActionLog.savePosition.start request: {}",positionRequest);
 
         var position = positionMapper.requestToEntity(positionRequest);
@@ -39,7 +45,7 @@ public class PositionServiceImpl implements PositionService {
     }
 
     @Override
-    public PositionResponse getPosition(Long id) {
+    public PositionDto getPosition(Long id) {
         logger.info("ActionLog.getPosition.start request: {}",id);
 
         Optional<Position> optionalPosition = Optional.ofNullable(positionRepository.findById(id)
@@ -54,7 +60,7 @@ public class PositionServiceImpl implements PositionService {
     }
 
     @Override
-    public List<PositionResponse> getAllPositions() {
+    public List<PositionDto> getAllPositions() {
         logger.info("ActionLog.getAllPositions.start");
 
         var positions = positionRepository.findAll();
@@ -68,7 +74,7 @@ public class PositionServiceImpl implements PositionService {
     }
 
     @Override
-    public PositionResponse editPosition(Position position) {
+    public PositionDto editPosition(PositionDto position) {
         logger.info("ActionLog.editPosition.start request: {}",position);
 
         Optional<Position> optionalPosition = Optional.ofNullable(positionRepository.findById(position.getId())
@@ -76,7 +82,11 @@ public class PositionServiceImpl implements PositionService {
 
         var existingPosition = optionalPosition.get();
 
-        existingPosition.setName(position.getName());
+        Optional.ofNullable(position.getName()).ifPresent(existingPosition::setName);
+        Optional.ofNullable(position.getSalary()).ifPresent(existingPosition::setSalary);
+        Optional.ofNullable(position.getDepartment())
+                .map(departmentMapper::dtoToEntity)
+                .ifPresent(existingPosition::setDepartment);
 
         var response = positionMapper
                 .entityToResponse(positionRepository.save(existingPosition));

@@ -13,5 +13,5 @@ public class PositionRequest {
 
     private double salary;
 
-    private DepartmentRequest departmentRequest;
+    private DepartmentDto department;
 }

@@ -1,7 +1,7 @@
 package com.example.demo.mapper;
 
+import com.example.demo.dto.EmployeeDto;
 import com.example.demo.dto.EmployeeRequest;
-import com.example.demo.dto.EmployeeResponse;
 import com.example.demo.entity.Employee;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -17,5 +17,5 @@ public interface EmployeeMapper {
     @Mapping(target = "id", ignore = true)
     Employee requestToEntity(EmployeeRequest employeeRequest);
 
-    EmployeeResponse entityToResponse(Employee employee);
+    EmployeeDto entityToResponse(Employee employee);
 }

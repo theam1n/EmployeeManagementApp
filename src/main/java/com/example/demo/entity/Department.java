@@ -37,4 +37,9 @@ public class Department {
 
     @OneToMany(mappedBy = "department")
     private Set<Employee> employees = new HashSet<>();
+
+    @PreRemove
+    public void preRemoveMethod() {
+        System.out.println("Department is deleted: " + this.getId());
+    }
 }

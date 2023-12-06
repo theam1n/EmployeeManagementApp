@@ -1,7 +1,7 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.dto.DepartmentDto;
 import com.example.demo.dto.DepartmentRequest;
-import com.example.demo.dto.DepartmentResponse;
 import com.example.demo.entity.Department;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.mapper.DepartmentMapper;
@@ -28,7 +28,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     private static final Logger logger = LoggerFactory.getLogger(DepartmentServiceImpl.class);
 
     @Override
-    public DepartmentResponse saveDepartment(DepartmentRequest departmentRequest) {
+    public DepartmentDto saveDepartment(DepartmentRequest departmentRequest) {
 
         logger.info("ActionLog.saveDepartment.start request: {}",departmentRequest);
 
@@ -41,7 +41,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public DepartmentResponse getDepartment(Long id) {
+    public DepartmentDto getDepartment(Long id) {
 
         logger.info("ActionLog.getDepartment.start request: {}",id);
 
@@ -58,7 +58,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 
     @Override
-    public List<DepartmentResponse> getAllDepartments() {
+    public List<DepartmentDto> getAllDepartments() {
 
         logger.info("ActionLog.getAllDepartments.start");
 
@@ -73,7 +73,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public DepartmentResponse editDepartment(Department department) {
+    public DepartmentDto editDepartment(DepartmentDto department) {
 
         logger.info("ActionLog.editDepartment.start request: {}",department);
 
@@ -82,7 +82,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         var existingDepartment = optionalDepartment.get();
 
-        existingDepartment.setName(department.getName());
+        Optional.ofNullable(department.getName()).ifPresent(existingDepartment::setName);
 
         var response = departmentMapper
                 .entityToResponse(departmentRepository.save(existingDepartment));

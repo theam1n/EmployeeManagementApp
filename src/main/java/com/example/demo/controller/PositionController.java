@@ -1,8 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.PositionDto;
 import com.example.demo.dto.PositionRequest;
-import com.example.demo.dto.PositionResponse;
-import com.example.demo.entity.Position;
 import com.example.demo.service.impl.PositionServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,36 +25,36 @@ public class PositionController {
     private final PositionServiceImpl positionService;
 
     @PostMapping
-    public ResponseEntity<PositionResponse> savePosition(
+    public ResponseEntity<PositionDto> savePosition(
             @RequestBody PositionRequest positionRequest) {
 
-        PositionResponse response = positionService.savePosition(positionRequest);
+        PositionDto response = positionService.savePosition(positionRequest);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PositionResponse> getPosition(
+    public ResponseEntity<PositionDto> getPosition(
             @PathVariable Long id) {
 
-        PositionResponse response = positionService.getPosition(id);
+        PositionDto response = positionService.getPosition(id);
 
         return ResponseEntity.ok(response);
     }
 
     @GetMapping
-    public ResponseEntity<List<PositionResponse>> getAllPositions(){
+    public ResponseEntity<List<PositionDto>> getAllPositions(){
 
-        List<PositionResponse> response = positionService.getAllPositions();
+        List<PositionDto> response = positionService.getAllPositions();
 
         return ResponseEntity.ok(response);
     }
 
     @PutMapping
-    public ResponseEntity<PositionResponse> editPosition(
-            @RequestBody Position position) {
+    public ResponseEntity<PositionDto> editPosition(
+            @RequestBody PositionDto position) {
 
-        PositionResponse response = positionService.editPosition(position);
+        PositionDto response = positionService.editPosition(position);
 
         return ResponseEntity.ok(response);
     }

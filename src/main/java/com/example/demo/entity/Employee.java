@@ -28,6 +28,7 @@ public class Employee {
 
     private String email;
 
+    @Builder.Default
     private boolean status = true;
 
     @CreationTimestamp
@@ -45,4 +46,9 @@ public class Employee {
             fetch = FetchType.EAGER)
     @JoinColumn(name = "position_id", referencedColumnName = "id")
     private Position position;
+
+    @PreRemove
+    public void preRemoveMethod() {
+        System.out.println("Employee is deleted: " + this.getId());
+    }
 }

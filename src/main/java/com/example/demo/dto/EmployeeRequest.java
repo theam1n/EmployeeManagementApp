@@ -15,7 +15,7 @@ public class EmployeeRequest {
 
     private String email;
 
-    private DepartmentRequest departmentRequest;
+    private DepartmentDto department;
 
-    private PositionRequest positionRequest;
+    private PositionDto position;
 }

@@ -1,7 +1,7 @@
 package com.example.demo.mapper;
 
+import com.example.demo.dto.PositionDto;
 import com.example.demo.dto.PositionRequest;
-import com.example.demo.dto.PositionResponse;
 import com.example.demo.entity.Position;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -17,5 +17,7 @@ public interface PositionMapper {
     @Mapping(target = "id", ignore = true)
     Position requestToEntity(PositionRequest positionRequest);
 
-    PositionResponse entityToResponse(Position position);
+    PositionDto entityToResponse(Position position);
+
+    Position dtoToEntity(PositionDto positionDto);
 }

@@ -18,7 +18,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Position {
+public class  Position {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,4 +41,9 @@ public class Position {
 
     @OneToMany(mappedBy = "position")
     private Set<Employee> employees = new HashSet<>();
+
+    @PreRemove
+    public void preRemoveMethod() {
+        System.out.println("Position is deleted: " + this.getId());
+    }
 }

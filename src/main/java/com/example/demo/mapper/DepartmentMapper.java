@@ -1,7 +1,7 @@
 package com.example.demo.mapper;
 
+import com.example.demo.dto.DepartmentDto;
 import com.example.demo.dto.DepartmentRequest;
-import com.example.demo.dto.DepartmentResponse;
 import com.example.demo.entity.Department;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -17,5 +17,8 @@ public interface DepartmentMapper {
     @Mapping(target = "id", ignore = true)
     Department requestToEntity(DepartmentRequest departmentRequest);
 
-    DepartmentResponse entityToResponse(Department department);
+    DepartmentDto entityToResponse(Department department);
+
+    Department dtoToEntity(DepartmentDto departmentDto);
+
 }

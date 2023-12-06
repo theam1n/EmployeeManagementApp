@@ -1,10 +1,12 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.DepartmentDto;
 import com.example.demo.dto.DepartmentRequest;
-import com.example.demo.dto.DepartmentResponse;
 import com.example.demo.entity.Department;
 import com.example.demo.service.impl.DepartmentServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,39 +26,40 @@ import java.util.List;
 public class DepartmentController {
 
     private final DepartmentServiceImpl departmentService;
+    private final static Logger logger = LoggerFactory.getLogger(DepartmentController.class);
 
 
     @PostMapping
-    public ResponseEntity<DepartmentResponse> saveDepartment(
+    public ResponseEntity<DepartmentDto> saveDepartment(
             @RequestBody DepartmentRequest departmentRequest) {
 
-        DepartmentResponse response = departmentService.saveDepartment(departmentRequest);
+        DepartmentDto response = departmentService.saveDepartment(departmentRequest);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DepartmentResponse> getDepartment(
+    public ResponseEntity<DepartmentDto> getDepartment(
             @PathVariable Long id) {
 
-        DepartmentResponse response = departmentService.getDepartment(id);
+        DepartmentDto response = departmentService.getDepartment(id);
 
         return ResponseEntity.ok(response);
     }
 
     @GetMapping
-    public ResponseEntity<List<DepartmentResponse>> getAllDepartments(){
+    public ResponseEntity<List<DepartmentDto>> getAllDepartments(){
 
-        List<DepartmentResponse> response = departmentService.getAllDepartments();
+        List<DepartmentDto> response = departmentService.getAllDepartments();
 
         return ResponseEntity.ok(response);
     }
 
     @PutMapping
-    public ResponseEntity<DepartmentResponse> editDepartment(
-            @RequestBody Department department) {
+    public ResponseEntity<DepartmentDto> editDepartment(
+            @RequestBody DepartmentDto department) {
 
-        DepartmentResponse response = departmentService.editDepartment(department);
+        DepartmentDto response = departmentService.editDepartment(department);
 
         return ResponseEntity.ok(response);
     }
@@ -64,9 +67,12 @@ public class DepartmentController {
     @DeleteMapping("/{id}")
     public void deleteDepartment(@PathVariable Long id){
 
+        logger.debug("delete department");
         departmentService.deleteDepartment(id);
 
     }
+
+
 
 
 

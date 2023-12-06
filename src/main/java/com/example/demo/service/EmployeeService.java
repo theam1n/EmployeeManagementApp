@@ -1,21 +1,20 @@
 package com.example.demo.service;
 
 
+import com.example.demo.dto.EmployeeDto;
 import com.example.demo.dto.EmployeeRequest;
-import com.example.demo.dto.EmployeeResponse;
-import com.example.demo.entity.Employee;
 
 import java.util.List;
 
 public interface EmployeeService {
 
-    EmployeeResponse saveEmployee(EmployeeRequest employeeRequest);
+    EmployeeDto saveEmployee(EmployeeRequest employeeRequest);
 
-    EmployeeResponse getEmployee(Long id);
+    EmployeeDto getEmployee(Long id);
 
-    List<EmployeeResponse> getAllEmployees();
+    List<EmployeeDto> getAllEmployees();
 
-    EmployeeResponse editEmployee(Employee employee);
+    EmployeeDto editEmployee(EmployeeDto employee);
 
     void deleteEmployee(Long id);
 }

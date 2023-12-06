@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
@@ -33,8 +34,11 @@ public class User implements UserDetails {
 
     private String surname;
 
+    @Email(message = "Invalid e-mail address")
+    @Column(unique = true)
     private String email;
 
+    @Column(unique = true)
     private String username;
 
     private String password;
@@ -81,5 +85,10 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return status;
+    }
+
+    @PreRemove
+    public void preRemoveMethod() {
+        System.out.println("User is deleted: " + this.getId());
     }
 }

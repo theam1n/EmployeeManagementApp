@@ -1,10 +1,12 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.dto.EmployeeDto;
 import com.example.demo.dto.EmployeeRequest;
-import com.example.demo.dto.EmployeeResponse;
 import com.example.demo.entity.Employee;
 import com.example.demo.exception.NotFoundException;
+import com.example.demo.mapper.DepartmentMapper;
 import com.example.demo.mapper.EmployeeMapper;
+import com.example.demo.mapper.PositionMapper;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
@@ -24,11 +26,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
 
     private final EmployeeMapper employeeMapper;
+    private final DepartmentMapper departmentMapper;
+    private final PositionMapper positionMapper;
 
     private static final Logger logger = LoggerFactory.getLogger(EmployeeServiceImpl.class);
 
     @Override
-    public EmployeeResponse saveEmployee(EmployeeRequest employeeRequest) {
+    public EmployeeDto saveEmployee(EmployeeRequest employeeRequest) {
 
         logger.info("ActionLog.saveEmployee.start request: {}",employeeRequest);
 
@@ -41,7 +45,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeResponse getEmployee(Long id) {
+    public EmployeeDto getEmployee(Long id) {
 
         logger.info("ActionLog.getEmployee.start request: {}",id);
 
@@ -57,7 +61,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeResponse> getAllEmployees() {
+    public List<EmployeeDto> getAllEmployees() {
 
         logger.info("ActionLog.getAllEmployees.start");
 
@@ -72,7 +76,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeResponse editEmployee(Employee employee) {
+    public EmployeeDto editEmployee(EmployeeDto employee) {
 
         logger.info("ActionLog.editEmployee.start request: {}",employee);
 
@@ -81,7 +85,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         var existingEmployee = optionalEmployee.get();
 
-        existingEmployee.setName(employee.getName());
+        Optional.ofNullable(employee.getName()).ifPresent(existingEmployee::setName);
+        Optional.ofNullable(employee.getSurname()).ifPresent(existingEmployee::setSurname);
+        Optional.ofNullable(employee.getEmail()).ifPresent(existingEmployee::setEmail);
+        Optional.ofNullable(employee.getDepartment())
+                .map(departmentMapper::dtoToEntity)
+                .ifPresent(existingEmployee::setDepartment);
+        Optional.ofNullable(employee.getPosition())
+                .map(positionMapper::dtoToEntity)
+                .ifPresent(existingEmployee::setPosition);
+
 
         var response = employeeMapper
                 .entityToResponse(employeeRepository.save(existingEmployee));

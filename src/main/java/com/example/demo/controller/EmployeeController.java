@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.EmployeeDto;
 import com.example.demo.dto.EmployeeRequest;
-import com.example.demo.dto.EmployeeResponse;
 import com.example.demo.entity.Employee;
 import com.example.demo.service.impl.EmployeeServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -26,36 +26,36 @@ public class EmployeeController {
     private final EmployeeServiceImpl employeeService;
 
     @PostMapping
-    public ResponseEntity<EmployeeResponse> saveResponse(
+    public ResponseEntity<EmployeeDto> saveResponse(
             @RequestBody EmployeeRequest employeeRequest) {
 
-        EmployeeResponse response = employeeService.saveEmployee(employeeRequest);
+        EmployeeDto response = employeeService.saveEmployee(employeeRequest);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeResponse> getResponse(
+    public ResponseEntity<EmployeeDto> getResponse(
             @PathVariable Long id) {
 
-        EmployeeResponse response = employeeService.getEmployee(id);
+        EmployeeDto response = employeeService.getEmployee(id);
 
         return ResponseEntity.ok(response);
     }
 
     @GetMapping
-    public ResponseEntity<List<EmployeeResponse>> getAllEmployees(){
+    public ResponseEntity<List<EmployeeDto>> getAllEmployees(){
 
-        List<EmployeeResponse> response = employeeService.getAllEmployees();
+        List<EmployeeDto> response = employeeService.getAllEmployees();
 
         return ResponseEntity.ok(response);
     }
 
     @PutMapping
-    public ResponseEntity<EmployeeResponse> editEmployee(
-            @RequestBody Employee employee) {
+    public ResponseEntity<EmployeeDto> editEmployee(
+            @RequestBody EmployeeDto employee) {
 
-        EmployeeResponse response = employeeService.editEmployee(employee);
+        EmployeeDto response = employeeService.editEmployee(employee);
 
         return ResponseEntity.ok(response);
     }
