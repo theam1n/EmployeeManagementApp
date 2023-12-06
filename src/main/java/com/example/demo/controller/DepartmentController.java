@@ -25,6 +25,7 @@ public class DepartmentController {
 
     private final DepartmentServiceImpl departmentService;
 
+
     @PostMapping
     public ResponseEntity<DepartmentResponse> saveDepartment(
             @RequestBody DepartmentRequest departmentRequest) {

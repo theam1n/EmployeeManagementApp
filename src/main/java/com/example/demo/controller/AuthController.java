@@ -7,6 +7,8 @@ import com.example.demo.dto.UserResponse;
 import com.example.demo.service.impl.UserServiceImpl;
 import com.example.demo.service.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +21,6 @@ public class AuthController {
     private final UserServiceImpl userService;
     private final JwtService jwtService;
 
-
-    @PostMapping("/hello")
-    public void hello() {
-        System.out.println("hello");
-    }
 
     @PostMapping("/register")
     public ResponseEntity<UserResponse> saveUser(@RequestBody UserRequest request) {
