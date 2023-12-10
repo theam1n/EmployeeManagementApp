@@ -12,7 +12,6 @@ import com.example.demo.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,11 +23,6 @@ import java.util.stream.Collectors;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-
-    private final EmployeeMapper employeeMapper;
-    private final DepartmentMapper departmentMapper;
-    private final PositionMapper positionMapper;
-
     private static final Logger logger = LoggerFactory.getLogger(EmployeeServiceImpl.class);
 
     @Override
@@ -36,8 +30,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         logger.info("ActionLog.saveEmployee.start request: {}",employeeRequest);
 
-        var employee = employeeMapper.requestToEntity(employeeRequest);
-        var response = employeeMapper.entityToResponse(employeeRepository.save(employee));
+        var employee = EmployeeMapper.INSTANCE.requestToEntity(employeeRequest);
+        var response = EmployeeMapper.INSTANCE.entityToResponse(employeeRepository.save(employee));
 
         logger.info("ActionLog.saveEmployee.end response: {}",response);
 
@@ -53,7 +47,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .orElseThrow(() -> new NotFoundException("Employee not found with id: " + id)));
 
         var employee = optionalEmployee.get();
-        var response = employeeMapper.entityToResponse(employee);
+        var response = EmployeeMapper.INSTANCE.entityToResponse(employee);
 
         logger.info("ActionLog.getEmployee.end response: {}",response);
 
@@ -67,7 +61,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         var employees = employeeRepository.findAll();
         var response = employees.stream()
-                .map(employeeMapper:: entityToResponse)
+                .map(EmployeeMapper.INSTANCE:: entityToResponse)
                 .collect(Collectors.toList());
 
         logger.info("ActionLog.getAllEmployees.end response: {}",response);
@@ -89,14 +83,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         Optional.ofNullable(employee.getSurname()).ifPresent(existingEmployee::setSurname);
         Optional.ofNullable(employee.getEmail()).ifPresent(existingEmployee::setEmail);
         Optional.ofNullable(employee.getDepartment())
-                .map(departmentMapper::dtoToEntity)
+                .map(DepartmentMapper.INSTANCE::dtoToEntity)
                 .ifPresent(existingEmployee::setDepartment);
         Optional.ofNullable(employee.getPosition())
-                .map(positionMapper::dtoToEntity)
+                .map(PositionMapper.INSTANCE::dtoToEntity)
                 .ifPresent(existingEmployee::setPosition);
 
 
-        var response = employeeMapper
+        var response = EmployeeMapper.INSTANCE
                 .entityToResponse(employeeRepository.save(existingEmployee));
 
         logger.info("ActionLog.editEmployee.end response: {}",response);
@@ -109,12 +103,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         logger.info("ActionLog.deleteEmployee.start request: {}",id);
 
-        try {
-            employeeRepository.deleteById(id);
-            logger.info("ActionLog.deleteEmployee.end");
-        } catch (EmptyResultDataAccessException ex) {
-            logger.error("Error deleting employee with id: {}. Employee not found.", id);
-        }
+        var employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Employee not found with id : " + id));
+
+        employeeRepository.deleteById(id);
+
+        logger.info("ActionLog.deleteEmployee.end");
 
     }
 }

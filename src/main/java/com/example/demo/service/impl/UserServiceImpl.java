@@ -13,7 +13,6 @@ import com.example.demo.service.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,8 +24,6 @@ public class UserServiceImpl implements UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
-
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -39,8 +36,8 @@ public class UserServiceImpl implements UserService {
 
         userRequest.setPassword(passwordEncoder.encode(userRequest.getPassword()));
 
-        var user = userMapper.requestToEntity(userRequest);
-        var response = userMapper.entityToResponse(userRepository.save(user));
+        var user = UserMapper.INSTANCE.requestToEntity(userRequest);
+        var response = UserMapper.INSTANCE.entityToResponse(userRepository.save(user));
 
         logger.info("ActionLog.saveUser.end response: {}", response);
 
@@ -68,4 +65,5 @@ public class UserServiceImpl implements UserService {
 
         return loginResponse;
     }
+
 }

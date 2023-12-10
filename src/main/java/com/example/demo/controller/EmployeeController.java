@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.EmployeeDto;
 import com.example.demo.dto.EmployeeRequest;
-import com.example.demo.entity.Employee;
 import com.example.demo.service.impl.EmployeeServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

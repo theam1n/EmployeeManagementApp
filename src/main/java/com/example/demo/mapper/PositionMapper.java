@@ -8,12 +8,14 @@ import org.mapstruct.ReportingPolicy;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring",
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface PositionMapper {
 
+    public static final PositionMapper INSTANCE = Mappers.getMapper(PositionMapper.class);
     @Mapping(target = "id", ignore = true)
     Position requestToEntity(PositionRequest positionRequest);
 

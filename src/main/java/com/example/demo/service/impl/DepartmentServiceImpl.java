@@ -10,7 +10,6 @@ import com.example.demo.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,8 +22,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     private final DepartmentRepository departmentRepository;
 
-    private final DepartmentMapper departmentMapper;
-
     private static final Logger logger = LoggerFactory.getLogger(DepartmentServiceImpl.class);
 
     @Override
@@ -32,8 +29,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         logger.info("ActionLog.saveDepartment.start request: {}",departmentRequest);
 
-        var department = departmentMapper.requestToEntity(departmentRequest);
-        var response = departmentMapper.entityToResponse(departmentRepository.save(department));
+        var department = DepartmentMapper.INSTANCE.requestToEntity(departmentRequest);
+        var response = DepartmentMapper.INSTANCE.entityToResponse(departmentRepository.save(department));
 
         logger.info("ActionLog.saveDepartment.end response: {}",response);
 
@@ -49,7 +46,7 @@ public class DepartmentServiceImpl implements DepartmentService {
                         .orElseThrow(() -> new NotFoundException("Department not found with id: " + id)));
 
         var department = optionalDepartment.get();
-        var response = departmentMapper.entityToResponse(department);
+        var response = DepartmentMapper.INSTANCE.entityToResponse(department);
 
         logger.info("ActionLog.getDepartment.end response: {}",response);
 
@@ -64,7 +61,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         var departments = departmentRepository.findAll();
         var response = departments.stream()
-                .map(departmentMapper:: entityToResponse)
+                .map(DepartmentMapper.INSTANCE:: entityToResponse)
                 .collect(Collectors.toList());
 
         logger.info("ActionLog.getAllDepartments.end response: {}",response);
@@ -84,7 +81,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         Optional.ofNullable(department.getName()).ifPresent(existingDepartment::setName);
 
-        var response = departmentMapper
+        var response = DepartmentMapper.INSTANCE
                 .entityToResponse(departmentRepository.save(existingDepartment));
 
         logger.info("ActionLog.editDepartment.end response: {}",response);
@@ -97,12 +94,12 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         logger.info("ActionLog.deleteDepartment.start request: {}",id);
 
-        try {
-            departmentRepository.deleteById(id);
-            logger.info("ActionLog.deleteDepartment.end");
-        } catch (EmptyResultDataAccessException ex) {
-            logger.error("Error deleting department with id: {}. Department not found.", id);
-        }
+        var department = departmentRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Deparment not found with id : " + id));
+
+        departmentRepository.deleteById(id);
+
+        logger.info("ActionLog.deleteDepartment.end");
 
     }
 }

@@ -8,6 +8,7 @@ import org.mapstruct.ReportingPolicy;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring",
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UserMapper {
 
+    public static final UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
     @Mapping(target = "id", ignore = true)
     User requestToEntity(UserRequest userRequest);
 

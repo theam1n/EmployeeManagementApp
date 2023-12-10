@@ -2,11 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.DepartmentDto;
 import com.example.demo.dto.DepartmentRequest;
-import com.example.demo.entity.Department;
 import com.example.demo.service.impl.DepartmentServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,8 +23,6 @@ import java.util.List;
 public class DepartmentController {
 
     private final DepartmentServiceImpl departmentService;
-    private final static Logger logger = LoggerFactory.getLogger(DepartmentController.class);
-
 
     @PostMapping
     public ResponseEntity<DepartmentDto> saveDepartment(
@@ -67,7 +62,6 @@ public class DepartmentController {
     @DeleteMapping("/{id}")
     public void deleteDepartment(@PathVariable Long id){
 
-        logger.debug("delete department");
         departmentService.deleteDepartment(id);
 
     }

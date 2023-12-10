@@ -12,7 +12,6 @@ import com.example.demo.service.PositionService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,17 +26,13 @@ public class PositionServiceImpl implements PositionService {
 
     private final DepartmentRepository departmentRepository;
 
-    private final PositionMapper positionMapper;
-
-    private final DepartmentMapper departmentMapper;
-
     private static final Logger logger = LoggerFactory.getLogger(PositionServiceImpl.class);
     @Override
     public PositionDto savePosition(PositionRequest positionRequest) {
         logger.info("ActionLog.savePosition.start request: {}",positionRequest);
 
-        var position = positionMapper.requestToEntity(positionRequest);
-        var response = positionMapper.entityToResponse(positionRepository.save(position));
+        var position = PositionMapper.INSTANCE.requestToEntity(positionRequest);
+        var response = PositionMapper.INSTANCE.entityToResponse(positionRepository.save(position));
 
         logger.info("ActionLog.savePosition.end response: {}",response);
 
@@ -52,7 +47,7 @@ public class PositionServiceImpl implements PositionService {
                 .orElseThrow(() -> new NotFoundException("Position not found with id: " + id)));
 
         var position = optionalPosition.get();
-        var response = positionMapper.entityToResponse(position);
+        var response = PositionMapper.INSTANCE.entityToResponse(position);
 
         logger.info("ActionLog.getPosition.end response: {}",response);
 
@@ -65,7 +60,7 @@ public class PositionServiceImpl implements PositionService {
 
         var positions = positionRepository.findAll();
         var response = positions.stream()
-                .map(positionMapper:: entityToResponse)
+                .map(PositionMapper.INSTANCE:: entityToResponse)
                 .collect(Collectors.toList());
 
         logger.info("ActionLog.getAllPositions.end response: {}",response);
@@ -85,10 +80,10 @@ public class PositionServiceImpl implements PositionService {
         Optional.ofNullable(position.getName()).ifPresent(existingPosition::setName);
         Optional.ofNullable(position.getSalary()).ifPresent(existingPosition::setSalary);
         Optional.ofNullable(position.getDepartment())
-                .map(departmentMapper::dtoToEntity)
+                .map(DepartmentMapper.INSTANCE::dtoToEntity)
                 .ifPresent(existingPosition::setDepartment);
 
-        var response = positionMapper
+        var response = PositionMapper.INSTANCE
                 .entityToResponse(positionRepository.save(existingPosition));
 
         logger.info("ActionLog.editPosition.end response: {}",response);
@@ -101,12 +96,12 @@ public class PositionServiceImpl implements PositionService {
 
         logger.info("ActionLog.deletePosition.start request: {}",id);
 
-        try {
-            positionRepository.deleteById(id);
-            logger.info("ActionLog.deletePosition.end");
-        } catch (EmptyResultDataAccessException ex) {
-            logger.error("Error deleting position with id: {}. Position not found.", id);
-        }
+        var position = positionRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Position not found with id : " + id));
+
+        positionRepository.deleteById(id);
+
+        logger.info("ActionLog.deletePosition.end");
 
     }
 }
