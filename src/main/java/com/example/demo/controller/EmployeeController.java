@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.EmployeeDto;
 import com.example.demo.dto.EmployeeRequest;
 import com.example.demo.service.impl.EmployeeServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ public class EmployeeController {
 
     @PostMapping
     public ResponseEntity<EmployeeDto> saveResponse(
+            @Valid
             @RequestBody EmployeeRequest employeeRequest) {
 
         EmployeeDto response = employeeService.saveEmployee(employeeRequest);

@@ -1,10 +1,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -31,6 +28,9 @@ public class Department {
 
     @UpdateTimestamp
     private LocalDateTime updated_at;
+
+    @Builder.Default
+    private boolean deleted = false;
 
     @OneToMany(mappedBy = "department")
     private Set<Position> positions = new HashSet<>();

@@ -45,12 +45,12 @@ class UserServiceImplTest {
 
         UserRequest userRequest = new UserRequest();
         userRequest.setUsername("amin03");
-        userRequest.setPassword("123");
+        userRequest.setPassword("123456789");
 
         User user = new User();
         user.setId(1L);
         user.setUsername("amin03");
-        user.setPassword("123");
+        user.setPassword("123456789");
 
         UserResponse expectedResponse = new UserResponse();
         expectedResponse.setId(1L);
@@ -73,7 +73,7 @@ class UserServiceImplTest {
         UserRequest userRequest = new UserRequest();
         userRequest.setName("Amin");
         userRequest.setUsername("amin03");
-        userRequest.setPassword("123");
+        userRequest.setPassword("123456789");
 
         when(userRepository.save(any(User.class)))
                 .thenThrow(new RuntimeException("Error during user save"));
@@ -88,12 +88,12 @@ class UserServiceImplTest {
 
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsername("amin03");
-        loginRequest.setPassword("123");
+        loginRequest.setPassword("123456789");
 
         User user = new User();
         user.setId(1L);
         user.setUsername("amin03");
-        user.setPassword("123");
+        user.setPassword("123456789");
 
         String expectedToken = "testToken";
 
@@ -111,7 +111,7 @@ class UserServiceImplTest {
 
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsername("amin03");
-        loginRequest.setPassword("123");
+        loginRequest.setPassword("123456789");
 
         when(userRepository.findByUsername("amin03")).thenReturn(Optional.empty());
 

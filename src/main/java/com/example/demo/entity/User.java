@@ -1,7 +1,6 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,7 +33,6 @@ public class User implements UserDetails {
 
     private String surname;
 
-    @Email
     @Column(unique = true)
     private String email;
 
@@ -44,7 +42,7 @@ public class User implements UserDetails {
     private String password;
 
     @Builder.Default
-    private boolean status = true;
+    private boolean deleted = false;
 
     @CreationTimestamp
     private LocalDateTime created_at;
@@ -84,7 +82,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return status;
+        return !deleted;
     }
 
     @PreRemove

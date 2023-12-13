@@ -34,6 +34,9 @@ public class  Position {
     @UpdateTimestamp
     private LocalDateTime updated_at;
 
+    @Builder.Default
+    private boolean deleted = false;
+
     @ManyToOne(cascade = {CascadeType.MERGE},
             fetch = FetchType.EAGER)
     @JoinColumn(name = "department_id", referencedColumnName = "id")

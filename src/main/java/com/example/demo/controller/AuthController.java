@@ -5,6 +5,7 @@ import com.example.demo.dto.LoginResponse;
 import com.example.demo.dto.UserRequest;
 import com.example.demo.dto.UserResponse;
 import com.example.demo.service.impl.UserServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +18,8 @@ public class AuthController {
 
     private final UserServiceImpl userService;
 
-
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> saveUser(@RequestBody UserRequest request) {
+    public ResponseEntity<UserResponse> saveUser(@Valid @RequestBody UserRequest request) {
         UserResponse response = userService.saveUser(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }

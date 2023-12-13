@@ -27,12 +27,11 @@ public class Employee {
 
     private String surname;
 
-    @Email
     @Column(unique = true)
     private String email;
 
     @Builder.Default
-    private boolean status = true;
+    private boolean deleted = false;
 
     @CreationTimestamp
     private LocalDateTime created_at;

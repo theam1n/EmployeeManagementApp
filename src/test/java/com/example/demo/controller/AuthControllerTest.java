@@ -44,7 +44,7 @@ class AuthControllerTest {
 
         UserRequest userRequest = new UserRequest();
         userRequest.setUsername("amin03");
-        userRequest.setPassword("123");
+        userRequest.setPassword("123456789");
 
         UserResponse userResponse = new UserResponse();
         userResponse.setId(1L);
@@ -69,7 +69,7 @@ class AuthControllerTest {
 
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsername("amin03");
-        loginRequest.setPassword("123");
+        loginRequest.setPassword("123456789");
 
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setToken("testToken");
